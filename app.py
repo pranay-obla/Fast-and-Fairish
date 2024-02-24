@@ -42,18 +42,18 @@ st.write('Enter information to get predictions:')
 # Inputs
 col1, col2 = st.columns([1, 2])
 with col1:
-    vehicle_type = st.selectbox('Vehicle Type', ['None'] + ['Motorcycle', 'Car', 'Sedan', 'SUV', 'Van', 'Bus', 'Truck'])
+    vehicle_type = st.selectbox('Vehicle Type', [''] + ['Motorcycle', 'Car', 'Sedan', 'SUV', 'Van', 'Bus', 'Truck'])
     fastag_id = st.text_input('FASTAG ID')
     transaction_amount = st.number_input('Transaction Amount', step=5)
-    geographical_location = st.text_input('Geographical Location (Lat, Long)')
+    geographical_location = st.text_input('Geographical Location')
 with col2:
     vehicle_plate = st.text_input('Vehicle Plate')
     toll_booth_id = st.text_input('Toll Booth ID (optional)')
     paid_amount = st.number_input('Paid Amount', step=5)
     vehicle_speed = st.text_input('Vehicle Speed (optional)')
 
-lane_type = st.selectbox('Lane Type', ['None'] + ['Regular', 'Express'])
-vehicle_dimensions = st.selectbox('Vehicle Dimensions (optional)', ['None'] + ['Small', 'Medium', 'Large'])
+lane_type = st.selectbox('Lane Type', [''] + ['Regular', 'Express'])
+vehicle_dimensions = st.selectbox('Vehicle Dimensions (optional)', [''] + ['Small', 'Medium', 'Large'])
 
 # Predict button
 if st.button('Predict'):
