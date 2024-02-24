@@ -52,7 +52,7 @@ def predict_fraud(processed_input):
     return prediction[0]
 
 # Streamlit UI
-st.title('Real-time Fraud Detection')
+st.title('Real-time FASTAG Fraud Detection')
 st.write('Enter the following information to detect fraud:')
 
 col1, col2, col3 = st.columns(3)
