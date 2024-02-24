@@ -1,10 +1,11 @@
 import streamlit as st
 import numpy as np
 from keras.models import load_model
+import joblib
 
 # Load model
 try:
-    model = load_model('neural_networks.h5')
+    model = joblib.load('best.pkl')
 except Exception as e:
     st.error(f"Error loading the model: {e}")
 
@@ -15,6 +16,24 @@ def predict(inputs):
         return prediction[0][0]
     except Exception as e:
         st.error(f"Error making prediction: {e}")
+
+# One-hot encode categorical features
+def one_hot_encode(vehicle_type):
+    # Mapping of categories to indices
+    category_mapping = {
+        'Motorcycle': 0,
+        'Car': 1,
+        'Sedan': 2,
+        'SUV': 3,
+        'Van': 4,
+        'Bus': 5,
+        'Truck': 6
+    }
+    # Initialize one-hot encoded array
+    encoded_array = np.zeros((1, len(category_mapping)))
+    # Set the corresponding index to 1
+    encoded_array[0, category_mapping[vehicle_type]] = 1
+    return encoded_array
 
 # Streamlit UI
 st.title('Real-time Prediction')
@@ -38,31 +57,14 @@ vehicle_dimensions = st.selectbox('Vehicle Dimensions (optional)', ['None'] + ['
 
 # Predict button
 if st.button('Predict'):
-    # Initialize input data with required fields
-    inputs = [
-        vehicle_type,
-        transaction_amount,
-        paid_amount,
-        geographical_location
-    ]
+    # Preprocess input data
+    # Replace 'vehicle_type' with the actual input data
+    vehicle_type_encoded = one_hot_encode(vehicle_type)
+    transaction_amount_scaled = transaction_amount
+    paid_amount_scaled = paid_amount
+    # Concatenate input features
+    inputs = np.concatenate([vehicle_type_encoded, [[transaction_amount_scaled, paid_amount_scaled]]], axis=1)
     
-    # Append optional fields if they are not empty or 'None'
-    optional_fields = [
-        vehicle_plate,
-        fastag_id,
-        toll_booth_id,
-        lane_type,
-        vehicle_dimensions,
-        vehicle_speed
-    ]
-    for field in optional_fields:
-        if field != '' and field != 'None':
-            inputs.append(field)
-    
-    # Ensure that at least the required input fields are present
-    if len(inputs) >= 4:
-        inputs = np.array([inputs])
-        prediction = predict(inputs)
-        st.write('Prediction:', prediction)
-    else:
-        st.error('Please provide at least the required input fields.')
+    # Make prediction
+    prediction = model.predict(inputs)
+    st.write('Prediction:', prediction)
