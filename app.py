@@ -9,13 +9,13 @@ import time
 try:
     df = pd.read_csv(r'Dataset/dataset.csv')
 except FileNotFoundError:
-    st.error("Dataset file not found. Please ensure the dataset file is located at 'Dataset/dataset.csv'")
+    st.error("Dataset not found")
 
 # Load the trained model
 try:
     model = joblib.load('best.pkl')
 except FileNotFoundError:
-    st.error("Model file not found. Please ensure the model file is located at 'best.pkl'")
+    st.error("Model file not found")
 
 def preprocess_input(transaction_amount, amount_paid, vehicle_type, lane_type, geographical_location):
     vehicle_type_encoder = LabelEncoder()
@@ -30,19 +30,19 @@ def preprocess_input(transaction_amount, amount_paid, vehicle_type, lane_type, g
         vehicle_type_encoded = vehicle_type_encoder.transform([vehicle_type])[0]
     except ValueError:
         vehicle_type_encoded = -1
-        st.error("Invalid vehicle type. Please select a valid option.")
+        st.error("Invalid vehicle type")
    
     try:
         lane_type_encoded = lane_type_encoder.transform([lane_type])[0]
     except ValueError:
         lane_type_encoded = -1 
-        st.error("Invalid lane type. Please select a valid option.")
+        st.error("Invalid lane type")
     
     try:
         geographical_location_encoded = geographical_location_encoder.transform([geographical_location])[0]
     except ValueError:
         geographical_location_encoded = -1
-        st.error("Invalid geographical location. Please enter latitude and longitude.")
+        st.error("Invalid geographical location")
 
     processed_input = np.array([[transaction_amount, amount_paid, vehicle_type_encoded, lane_type_encoded, geographical_location_encoded]])
     return processed_input
@@ -84,7 +84,7 @@ except Exception as e:
     st.error(f"An error occurred: {e}")
 
 if st.button('Detect Fraud'):
-    all_inputs_valid = True  # Flag to track if all inputs are valid
+    all_inputs_valid = True
     
     try:
         processed_input = preprocess_input(transaction_amount, amount_paid, vehicle_type, lane_type, geographical_location)
@@ -92,7 +92,7 @@ if st.button('Detect Fraud'):
         all_inputs_valid = False
     
     if all_inputs_valid:
-        with st.spinner('Detecting fraud...'):
+        with st.spinner('Please Wait...'):
             time.sleep(3) 
             prediction = predict_fraud(processed_input)
             if prediction == 1:
