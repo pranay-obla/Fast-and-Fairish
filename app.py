@@ -96,6 +96,6 @@ if st.button('Detect Fraud'):
             time.sleep(3) 
             prediction = predict_fraud(processed_input)
             if prediction == 1:
-                st.write('Fraudulent Transaction Detected')
+                st.write('Potential Fraud Detected')
             else:
                 st.write('No Fraud Detected')
