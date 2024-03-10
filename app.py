@@ -30,13 +30,13 @@ def preprocess_input(transaction_amount, amount_paid, vehicle_type, lane_type, g
         vehicle_type_encoded = vehicle_type_encoder.transform([vehicle_type])[0]
     except ValueError:
         vehicle_type_encoded = -1
-        st.error("Invalid vehicle type")
+        # st.error("Invalid vehicle type")
    
     try:
         lane_type_encoded = lane_type_encoder.transform([lane_type])[0]
     except ValueError:
         lane_type_encoded = -1 
-        st.error("Invalid lane type")
+        # st.error("Invalid lane type")
     
     try:
         geographical_location_encoded = geographical_location_encoder.transform([geographical_location])[0]
